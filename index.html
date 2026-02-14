@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>San Valentín</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: 'Segoe UI', cursive;
+  background: linear-gradient(to bottom, #f3e6eb, #f8eef2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.hidden { display: none; }
+
+/* Pantalla de carga */
+.carga { text-align: center; }
+
+.sobre-icono { 
+  font-size: 100px; 
+  animation: latido 1.8s infinite ease-in-out;
+}
+
+/* Latido suave */
+@keyframes latido {
+  0% { transform: scale(1); }
+  25% { transform: scale(1.08); }
+  50% { transform: scale(0.97); }
+  75% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+.barra {
+  width: 300px;
+  height: 20px;
+  background: #eee;
+  border-radius: 10px;
+  margin: 20px auto;
+  overflow: hidden;
+}
+
+.progreso {
+  height: 100%;
+  width: 0;
+  background: pink;
+  transition: width 0.1s;
+}
+
+/* Login */
+.login {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  text-align: center;
+}
+
+input {
+  display: block;
+  margin: 10px auto;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+button {
+  background: pink;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+/* Mensaje */
+.mensaje {
+  text-align: center;
+  font-size: 26px;
+  color: #b03060;
+  margin-bottom: 20px;
+  font-weight: bold;
+  transition: opacity 0.8s ease;
+}
+
+.mensaje.desaparecer {
+  opacity: 0;
+}
+
+/* CONTENEDOR */
+.contenedor {
+  position: relative;
+  width: 500px;
+  height: 450px;
+}
+
+/* SOBRE */
+.sobre {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 450px;
+  height: 300px;
+  background: #ffc0cb;
+  border-radius: 10px;
+  box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+  z-index: 2;
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.solapa {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  border-left: 225px solid transparent;
+  border-right: 225px solid transparent;
+  border-bottom: 150px solid #ff99aa;
+}
+
+.corazon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 70px;
+  color: #ff0033;
+  text-shadow: 0 0 20px rgba(255,0,0,0.7);
+  cursor: pointer;
+  z-index: 3;
+  transition: transform 0.3s ease;
+}
+
+.corazon:hover {
+  transform: translate(-50%, -50%) scale(1.2);
+}
+
+/* CARTA */
+.carta {
+  position: absolute;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 380px;
+  height: 250px;
+  background: #fffdf7;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  text-align: left;
+  padding: 20px;
+  font-size: 16px; /* más pequeño para que entre todo el texto */
+  font-family: 'Brush Script MT', cursive;
+  color: #b03060;
+  border-radius: 5px;
+  box-shadow: 
+      0 8px 20px rgba(0,0,0,0.25),
+      inset 0 0 40px rgba(0,0,0,0.05);
+  transition: all 1s ease;
+  z-index: 1;
+  overflow-y: auto; /* scroll si el texto es largo */
+}
+
+.carta.salir {
+  transform: translate(-50%, -250px);
+  z-index: 5;
+}
+
+.carta.fullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  transform: none;
+  width: 100vw;
+  height: 100vh;
+  border-radius: 0;
+  font-size: 20px; /* tamaño ajustado en pantalla completa */
+  padding: 40px;
+  box-shadow: none;
+  overflow-y: auto;
+}
+
+.sobre.desaparecer {
+  opacity: 0;
+  transform: translateX(-50%) scale(0.8);
+}
+</style>
+</head>
+
+<body>
+
+<div class="carga" id="carga">
+  <div class="sobre-icono">💌</div>
+  <div class="barra">
+    <div class="progreso" id="progreso"></div>
+  </div>
+  <div id="porcentaje">0%</div>
+</div>
+
+<div class="login hidden" id="login">
+  <h2>Iniciar Sesión</h2>
+  <input type="text" id="usuario" placeholder="Usuario">
+  <input type="password" id="clave" placeholder="Contraseña">
+  <button onclick="validar()">Entrar</button>
+</div>
+
+<div class="hidden" id="contenido">
+  <div class="mensaje" id="mensaje">FELIZ DIA DE SAN VALENTIN MI AMOR</div>
+
+  <div class="contenedor">
+    <div class="carta" id="carta">
+      <div>
+        Mi amor ❤️<br><br>
+        Hoy que celebramos San Valentín, quiero aprovechar para recordarte algo que intento demostrarte todos los días: eres el amor de mi vida, mi compañera, mi paz y mi mayor bendición.<br><br>
+        Desde que llegaste a mi vida, todo tiene más sentido. No solo eres la mujer que amo, eres mi mejor amiga, mi apoyo incondicional y la persona con la que quiero compartir cada sueño, cada meta y cada momento, bueno o difícil. A tu lado aprendí que el amor verdadero no es solo palabras bonitas, sino paciencia, respeto, complicidad y compromiso.<br><br>
+        Me enamora tu sonrisa, tu forma de ser, tu ternura y esa fuerza que llevas dentro. Me enamora cómo cuidas de nosotros, cómo luchas por lo que quieres y cómo haces que cada día sea especial, incluso en las cosas más simples.<br><br>
+        Gracias por elegirme cada día, por creer en mí, por abrazarme cuando lo necesito y por amarme con ese corazón tan grande que tienes. Prometo seguir cuidando nuestro amor, seguir creciendo contigo y nunca dejar de conquistarte.<br><br>
+        Hoy y siempre quiero que sepas que eres mi hogar, mi felicidad y el regalo más hermoso que la vida me ha dado.<br><br>
+        Feliz San Valentín, mi esposa hermosa 💖<br>
+        Te amo más de lo que las palabras pueden expresar.
+      </div>
+    </div>
+
+    <div class="sobre" id="sobre">
+      <div class="solapa"></div>
+      <div class="corazon" id="corazon">❤</div>
+    </div>
+  </div>
+</div>
+
+<script>
+let barra = document.getElementById('progreso');
+let porcentaje = document.getElementById('porcentaje');
+let carga = document.getElementById('carga');
+let login = document.getElementById('login');
+let contenido = document.getElementById('contenido');
+
+function iniciarCarga(callback){
+  let progreso = 0;
+  barra.style.width = "0%";
+  porcentaje.textContent = "0%";
+  carga.classList.remove('hidden');
+
+  const intervalo = setInterval(() => {
+    progreso += 3;
+    barra.style.width = progreso + "%";
+    porcentaje.textContent = progreso + "%";
+
+    if (progreso >= 100) {
+      clearInterval(intervalo);
+      setTimeout(() => {
+        carga.classList.add('hidden');
+        callback();
+      }, 400);
+    }
+  }, 80);
+}
+
+/* PRIMERA CARGA */
+iniciarCarga(() => {
+  login.classList.remove('hidden');
+});
+
+function validar() {
+  const usuario = document.getElementById('usuario').value;
+  const clave = document.getElementById('clave').value;
+
+  if (usuario === "Sorangel" && clave === "29122024") {
+    login.classList.add('hidden');
+
+    /* SEGUNDA CARGA */
+    iniciarCarga(() => {
+      contenido.classList.remove('hidden');
+    });
+
+  } else {
+    alert("Usuario o contraseña incorrectos");
+  }
+}
+
+
+const sobre = document.getElementById('sobre');
+const corazon = document.getElementById('corazon');
+const carta = document.getElementById('carta');
+const mensaje = document.getElementById('mensaje');
+
+corazon.addEventListener('click', () => {
+
+  carta.classList.add('salir');
+  mensaje.classList.add('desaparecer');
+
+  setTimeout(() => {
+    sobre.classList.add('desaparecer');
+  }, 600);
+
+  setTimeout(() => {
+    carta.classList.add('fullscreen');
+  }, 1200);
+
+});
+
+</script>
+
+</body>
+</html>
